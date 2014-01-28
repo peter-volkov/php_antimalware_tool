@@ -4,20 +4,20 @@ class XmlValidator {
         $return = "<br/>\n";
         switch ($error->level) {
             case LIBXML_ERR_WARNING:
-                $return.= "<b>Warning $error->code</b>: ";
+                $return .= sprintf(PS_ERR_XML_VALIDATION_WARNING, $error->code);
             break;
             case LIBXML_ERR_ERROR:
-                $return.= "<b>Error $error->code</b>: ";
+                $return .= sprintf(PS_ERR_XML_VALIDATION_ERROR, $error->code);
             break;
             case LIBXML_ERR_FATAL:
-                $return.= "<b>Fatal Error $error->code</b>: ";
+                $return .= sprintf(PS_ERR_XML_VALIDATION_FATAL_ERROR, $error->code);
             break;
         }
         $return.= trim($error->message);
         if ($error->file) {
-            $return.= " in <b>$error->file</b>";
+            $return .= sprintf(PS_ERR_XML_FILE_SPEC, $error->file);
         }
-        $return.= " on line <b>$error->line</b>\n";
+        $return .= sprintf(PS_ERR_XML_LINE_SPEC, $error->line);
         return $return;
     }
     function libxmlDisplayErrors() {
@@ -34,7 +34,7 @@ class XmlValidator {
         $xml->loadXML($xml_str);
        
         if (!$xml->schemaValidate($schema_path)) {
-            print '<b>DOMDocument::schemaValidate() Generated Errors!</b>';
+            print PS_ERR_XML_VALIDATION_FAILED;
             $this->libxmlDisplayErrors();
             return false;
         }
